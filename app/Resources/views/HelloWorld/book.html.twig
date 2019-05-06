@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>
+        {{ book.name }}
+    </title>
+    <body>
+        <a href="{{ path('mainpage') }}"> <h1>Home</h1> </a>
+            <ul>
+                <li><img src="{{ asset(book.getPictureUrl()) }}"></li>
+                <li><h2>Название книги : <strong>{{ book.name }}</strong></h2></li>
+                <li>Описание : <strong>{{ book.caption }}</strong></li>
+                <li>Год выпуска: {{ book.getPublicYear() }}</li>
+            </ul>
+    </body>
+</head>
+</html>
