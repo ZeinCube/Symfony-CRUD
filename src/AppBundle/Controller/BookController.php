@@ -31,6 +31,7 @@ class BookController extends Controller
         foreach ($books as $book){
             $book->setAuthors($this->getDoctrine()->getRepository
             (Author::class)->findAllAuthorsByBookId($book->getId()));
+
         }
         return $this->render('HelloWorld/HelloWorld.html.twig', array('books' => $books));
     }
@@ -71,7 +72,7 @@ class BookController extends Controller
             ->add('caption', TextType::class)
             ->add('picture_url', TextType::class)
             ->add('publicyear', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'Редактировать книгу'))
+            ->add('save', SubmitType::class, array('label' => 'Сохранить книгу'))
             ->getForm();
 
         $form->handleRequest($request);

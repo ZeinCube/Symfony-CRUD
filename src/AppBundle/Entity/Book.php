@@ -115,13 +115,13 @@ class Book
 
     private $authors;
 
-    public function getAuthors()
+    public function getAuthors() : array
     {
         return $this->authors;
     }
 
-    public function setAuthors($authors): void
+    public function setAuthors($authors_array): void
     {
-        $this->authors = $authors;
+        $this->authors = $authors_array;
     }
 }
