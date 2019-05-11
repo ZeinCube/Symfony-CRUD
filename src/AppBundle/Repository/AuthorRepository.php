@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\Author;
 use ArrayObject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use function Sodium\add;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -19,7 +20,7 @@ class AuthorRepository extends ServiceEntityRepository
 
     /**
      * @param $id
-     * @return ArrayObject
+     * @return array
      * @throws DBALException
      */
     public function findAllAuthorsByBookId($id): array
@@ -34,18 +35,26 @@ class AuthorRepository extends ServiceEntityRepository
         $query->bindValue('name', $id);
         $query->execute();
         $ids = $query->fetchAll();
-        $stmt = $this->getEntityManager()->getConnection()->prepare(
+        $sql =
             '
-        SELECT author_name FROM authors WHERE id IN (:ids);
+        SELECT author_name FROM authors WHERE id IN (?);
         '
-        );
-        $ids_clear = [];
+        ;
+        $ids_clear = array();
         foreach ($ids as $key => $value) {
-            array_push($ids_clear, $value);
+            foreach ($value as $k => $val){
+                $ids_clear[] = $val;
+            }
         }
-        $stmt->bindValue('ids', $ids_clear);
-        $stmt->execute();
+        $types = [Connection::PARAM_INT_ARRAY];
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, [$ids_clear], $types);
         $res = $stmt->fetchAll();
-        return $res;
+        $authors = array();
+        foreach ($res as $key => $value){
+            foreach ($value as $k => $val){
+                array_push($authors, $val);
+            }
+        }
+        return $authors;
     }
 }

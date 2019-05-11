@@ -9,7 +9,9 @@
             Описание : {{ book.caption }} <br>
             Год публикации : {{ book.publicYear }} г. <br>
             Автор(ы):
-            {{ book.authors|join(', ') }}
+            {% for author in book.authors %}
+                {{ author }} <br>
+            {% endfor %}
         </li>
             <br>
             {% endfor %}
